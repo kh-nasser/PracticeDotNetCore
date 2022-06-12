@@ -10,8 +10,8 @@ namespace DataLayer.Entities.Users
 {
     public class UserRole : BaseEntity
     {
-        public int RoleId { get; set; }
-        public int UserId { get; set; }
+        public long RoleId { get; set; }
+        public long UserId { get; set; }
 
         #region Relations
         [ForeignKey("UserId")]

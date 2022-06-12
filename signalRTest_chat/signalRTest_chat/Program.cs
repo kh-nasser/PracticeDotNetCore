@@ -1,7 +1,14 @@
+using DataLayer.Context;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+//ConfigureServices
 builder.Services.AddControllersWithViews();
+
+var connectionString = builder.Configuration.GetConnectionString("AppDb");
+builder.Services.AddDbContext<ChatContext>(x => x.UseSqlServer(connectionString));
 
 var app = builder.Build();
 

@@ -16,7 +16,7 @@ namespace DataLayer.Entities.Chats
         [MaxLength(110)]
         public string GroupToken { get; set; }
 
-        public string OwnerId { get; set; }
+        public long OwnerId { get; set; }
 
         #region Relations
         [ForeignKey("OwnerId")]

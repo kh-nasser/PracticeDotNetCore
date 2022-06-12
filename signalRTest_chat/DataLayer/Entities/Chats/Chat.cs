@@ -7,7 +7,7 @@ namespace DataLayer.Entities.Chats
     {
         public string ChatBody { get; set; }
         public long UserId { get; set; }
-        public long x { get; set; }
+        public long GroupId { get; set; }
 
         #region Relations
         [ForeignKey("UserId")]

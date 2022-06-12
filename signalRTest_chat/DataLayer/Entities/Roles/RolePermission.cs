@@ -10,10 +10,10 @@ namespace DataLayer.Entities.Roles
 {
     public class RolePermission : BaseEntity
     {
-        public int RoleId { get; set; }
+        public long RoleId { get; set; }
         public Permission Permission { get; set; }
 
-        #region Relation
+        #region Relations
         [ForeignKey("RoleId")]
         public Role Role { get; set; }
         #endregion

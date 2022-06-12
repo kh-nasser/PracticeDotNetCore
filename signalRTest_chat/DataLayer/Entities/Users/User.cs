@@ -9,9 +9,9 @@ namespace DataLayer.Entities.Users
         public string UserName { get; set; }
         [MinLength(6)]
         [MaxLength(50)]
-        public int Password { get; set; }
+        public string Password { get; set; }
         [MaxLength(110)]
-        public int Avatar { get; set; }
+        public string Avatar { get; set; }
 
         #region Relations
         public ICollection<ChatGroup> ChatGroups { get; set; }
