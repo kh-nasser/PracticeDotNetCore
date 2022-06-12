@@ -1,0 +1,2 @@
+# PracticeDotNetCore
+Practice .NetCore
