@@ -1,3 +1,6 @@
+using CoreLayer.Services.Chats;
+using CoreLayer.Services.Roles;
+using CoreLayer.Services.Users;
 using DataLayer.Context;
 using Microsoft.EntityFrameworkCore;
 
@@ -9,6 +12,11 @@ builder.Services.AddControllersWithViews();
 
 var connectionString = builder.Configuration.GetConnectionString("AppDb");
 builder.Services.AddDbContext<ChatContext>(x => x.UseSqlServer(connectionString));
+
+//di
+builder.Services.AddScoped<IChatService, ChatService>();
+builder.Services.AddScoped<IRoleService, RoleService>();
+builder.Services.AddScoped<IUserService, UserService>();
 
 var app = builder.Build();
 
