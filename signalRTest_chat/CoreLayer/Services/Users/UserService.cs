@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CoreLayer.Services.Users
 {
-    public class UserService:BaseService,IUserService
+    public class UserService : BaseService, IUserService
     {
         public UserService(ChatContext context) : base(context)
         {
@@ -33,7 +33,7 @@ namespace CoreLayer.Services.Users
                 return false;
 
             var password = registerModel.Password.EncodePasswordMd5();
-            var user=new User()
+            var user = new User()
             {
                 Avatar = "Default.jpg",
                 CreateDate = DateTime.Now,
@@ -43,6 +43,20 @@ namespace CoreLayer.Services.Users
             Insert(user);
             await Save();
             return true;
+        }
+
+        public async Task<User> LoginUser(LoginViewModel loginModel)
+        {
+            var user = await Table<User>().SingleOrDefaultAsync(u => u.UserName == loginModel.UserName.ToLower());
+            if (user == null)
+                return null;
+
+            var password = loginModel.Password.EncodePasswordMd5();
+
+            if (password != user.Password)
+                return null;
+
+            return user;
         }
     }
 }

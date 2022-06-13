@@ -2,6 +2,7 @@ using CoreLayer.Services.Chats;
 using CoreLayer.Services.Roles;
 using CoreLayer.Services.Users;
 using DataLayer.Context;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -18,6 +19,19 @@ builder.Services.AddScoped<IChatService, ChatService>();
 builder.Services.AddScoped<IRoleService, RoleService>();
 builder.Services.AddScoped<IUserService, UserService>();
 
+builder.Services.AddAuthentication(option =>
+{
+    option.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+    option.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+    option.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+}
+).AddCookie(option =>
+{
+    option.LoginPath = "/auth/login";
+    option.LogoutPath = "/auth/logout";
+    option.ExpireTimeSpan = TimeSpan.FromDays(30);
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -33,6 +47,7 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(

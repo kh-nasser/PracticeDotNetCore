@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using CoreLayer.ViewModels.Auth;
+using DataLayer.Entities.Users;
 
 namespace CoreLayer.Services.Users
 {
@@ -8,5 +9,6 @@ namespace CoreLayer.Services.Users
         Task<bool> IsUserExist(string userName);
         Task<bool> IsUserExist(long userId);
         Task<bool> RegisterUser(RegisterViewModel registerModel);
+        Task<User> LoginUser(LoginViewModel loginModel);
     }
 }
