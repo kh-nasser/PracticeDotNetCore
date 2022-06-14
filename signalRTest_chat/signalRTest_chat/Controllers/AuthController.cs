@@ -23,6 +23,12 @@ namespace signalRTest_chat.Controllers
         {
             return View();
         }
+
+        public IActionResult Register()
+        {
+            return RedirectToAction("Index");
+        }
+
         [HttpPost]
         public async Task<IActionResult> Register(RegisterViewModel model)
         {
@@ -33,10 +39,10 @@ namespace signalRTest_chat.Controllers
             var result = await _userService.RegisterUser(model);
             if (!result)
             {
-                ModelState.AddModelError(model.UserName,"نام کاربری تکراری است");
+                ModelState.AddModelError(model.UserName, "نام کاربری تکراری است");
                 return View("Index", model);
             }
-            return Redirect("/auth#login");
+            return Redirect("/auth");
         }
 
 
