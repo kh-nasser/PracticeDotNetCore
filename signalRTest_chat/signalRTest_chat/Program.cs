@@ -4,6 +4,7 @@ using CoreLayer.Services.Users;
 using DataLayer.Context;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
+using signalRTest_chat.Hubs;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,6 +19,8 @@ builder.Services.AddDbContext<ChatContext>(x => x.UseSqlServer(connectionString)
 builder.Services.AddScoped<IChatService, ChatService>();
 builder.Services.AddScoped<IRoleService, RoleService>();
 builder.Services.AddScoped<IUserService, UserService>();
+//signalR
+builder.Services.AddSignalR();
 
 builder.Services.AddAuthentication(option =>
 {
@@ -53,5 +56,6 @@ app.UseAuthorization();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
-
+//signalR
+app.MapHub<ChatHub>("/chat");
 app.Run();
