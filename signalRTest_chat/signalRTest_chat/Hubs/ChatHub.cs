@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.SignalR;
+using System.Security.Claims;
 
 namespace signalRTest_chat.Hubs
 {
@@ -14,9 +15,11 @@ namespace signalRTest_chat.Hubs
             return base.OnDisconnectedAsync(exception);
         }
 
-        public async Task Greeting()
+        public async Task SendMessage(string text)
         {
-            await Clients.All.SendAsync("Welcome", "Hello");
+            //todo presitent in db
+            var userName = Context.User.FindFirstValue(ClaimTypes.Name);
+            await Clients.All.SendAsync("ReceiveMessage", $"{userName}: {text}");
         }
     }
 }

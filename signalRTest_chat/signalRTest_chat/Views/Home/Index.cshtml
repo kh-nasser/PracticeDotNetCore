@@ -35,8 +35,8 @@
 			</div>
 		</div>
 		<div class="footer">
-			<form>
-				<input type="text" class="form-control" placeholder="متن خود را وارد کنید">
+			<form onsubmit="sendMessage(event)">
+				<input id="messageText" type="text" class="form-control" placeholder="متن خود را وارد کنید">
 				<button class="btn btn-success">
 					ارسال
 					<i class="fa fa-send"></i>
@@ -142,9 +142,21 @@
 	.withUrl("/chat")
 	.build();
 
-	connection.on("Welcome",function(txt){
+	connection.on("Greeting",function(txt){
 		console.log(txt);
 	});
+	connection.on("ReceiveMessage", onReceiveMessageResult);
+
 	connection.start();
+
+	function onReceiveMessageResult(text){
+		console.log(text);
+	}
+
+	function sendMessage(event){
+		event.preventDefault();//prevent refresh
+		var text = $("#messageText").val();
+		connection.invoke("SendMessage",text)
+	}
 </script>
 }
