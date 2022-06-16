@@ -24,6 +24,7 @@ namespace DataLayer.Context
         public DbSet<RolePermission> RolePermissions { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<UserRole> UserRoles { get; set; }
+        public DbSet<UserGroup> UserGroups { get; set; }
         #endregion
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -32,7 +33,6 @@ namespace DataLayer.Context
             //var cascades = modelBuilder.Model.GetEntityTypes()
             //    .SelectMany(t => t.GetForeignKeys())
             //    .Where(fk => !fk.IsOwnership && fk.DeleteBehavior == DeleteBehavior.Cascade);
-
 
             //foreach (var fk in cascades)
             //{
@@ -46,6 +46,11 @@ namespace DataLayer.Context
                             .WithMany(b => b.Chats)
                             .HasForeignKey(b => b.UserId)
                             .OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<UserGroup>()
+                         .HasOne(b => b.User)
+                         .WithMany(b => b.UserGroups)
+                         .HasForeignKey(b => b.UserId)
+                         .OnDelete(DeleteBehavior.Restrict);
             #endregion
 
             base.OnModelCreating(modelBuilder);

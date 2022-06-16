@@ -1,5 +1,7 @@
-﻿using DataLayer.Context;
+﻿using CoreLayer.Services.Users.UserGroups;
+using DataLayer.Context;
 using DataLayer.Entities.Chats;
+using DataLayer.Entities.Users;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -11,8 +13,10 @@ namespace CoreLayer.Services.Chats.ChatGroups
 {
     public class ChatGroupService : BaseService, IChatGroupService
     {
-        public ChatGroupService(ChatContext context) : base(context)
+        private IUserGroupService _userGroupService;
+        public ChatGroupService(ChatContext context, IUserGroupService  userGroup) : base(context)
         {
+            _userGroupService = userGroup;
         }
 
         public async Task<List<ChatGroup>> GetChatGroupsAsync(long userId)
@@ -32,6 +36,12 @@ namespace CoreLayer.Services.Chats.ChatGroups
 
             Insert(chatGroup);
             await Save();
+            await _userGroupService.JoinGroup(new UserGroup()
+            {
+                CreateDate = DateTime.Now,
+                GroupId = chatGroup.Id,
+                UserId = userId
+            });
 
             return chatGroup;
         }

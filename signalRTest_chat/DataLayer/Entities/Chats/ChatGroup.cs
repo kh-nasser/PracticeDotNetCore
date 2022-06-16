@@ -15,13 +15,14 @@ namespace DataLayer.Entities.Chats
         public string GroupTitle { get; set; }
         [MaxLength(110)]
         public string GroupToken { get; set; }
-
         public long OwnerId { get; set; }
-
+        [MaxLength(110)]
+        public string ImageName { get; set; }
         #region Relations
         [ForeignKey("OwnerId")]
         public User User { get; set; }
         public ICollection<Chat> Chats{ get; set; }
+        public ICollection<UserGroup> UserGroups { get; set; }
         #endregion
     }
 }

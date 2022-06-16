@@ -2,6 +2,7 @@ using CoreLayer.Services.Chats;
 using CoreLayer.Services.Chats.ChatGroups;
 using CoreLayer.Services.Roles;
 using CoreLayer.Services.Users;
+using CoreLayer.Services.Users.UserGroups;
 using DataLayer.Context;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
@@ -17,10 +18,13 @@ var connectionString = builder.Configuration.GetConnectionString("AppDb");
 builder.Services.AddDbContext<ChatContext>(x => x.UseSqlServer(connectionString));
 
 //di
-builder.Services.AddScoped<IChatService, ChatService>();
 builder.Services.AddScoped<IRoleService, RoleService>();
-builder.Services.AddScoped<IUserService, UserService>();
+
+builder.Services.AddScoped<IChatService, ChatService>();
 builder.Services.AddScoped<IChatGroupService, ChatGroupService>();
+
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IUserGroupService, UserGroupService>();
 //signalR
 builder.Services.AddSignalR();
 
