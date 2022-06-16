@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using CoreLayer.Services.Chats.ChatGroups;
+using CoreLayer.Utilities;
+using DataLayer.Entities.Chats;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using signalRTest_chat.Models;
 using System.Diagnostics;
@@ -8,16 +11,19 @@ namespace signalRTest_chat.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly IChatGroupService _chatGroupService;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, IChatGroupService chatGroup)
         {
             _logger = logger;
+            _chatGroupService = chatGroup;
         }
 
         [Authorize]
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            var model = await _chatGroupService.GetChatGroupsAsync(User.GetUserId());
+            return View(model);
         }
 
         public IActionResult Privacy()

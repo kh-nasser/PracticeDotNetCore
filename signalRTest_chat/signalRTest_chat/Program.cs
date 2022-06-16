@@ -1,4 +1,5 @@
 using CoreLayer.Services.Chats;
+using CoreLayer.Services.Chats.ChatGroups;
 using CoreLayer.Services.Roles;
 using CoreLayer.Services.Users;
 using DataLayer.Context;
@@ -19,6 +20,7 @@ builder.Services.AddDbContext<ChatContext>(x => x.UseSqlServer(connectionString)
 builder.Services.AddScoped<IChatService, ChatService>();
 builder.Services.AddScoped<IRoleService, RoleService>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IChatGroupService, ChatGroupService>();
 //signalR
 builder.Services.AddSignalR();
 
