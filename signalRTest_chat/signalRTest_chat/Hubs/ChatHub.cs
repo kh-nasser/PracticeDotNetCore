@@ -14,11 +14,18 @@ namespace signalRTest_chat.Hubs
         }
         public async Task CreateGroup(string groupName)
         {
-            try {
-               var group = await _chatGroupService.InsertGroupsAsync(groupName, Context.User.GetUserId());
-               await Clients.Caller.SendAsync("NewGroup", groupName, group.GroupToken);
+            try
+            {
+                var group = await _chatGroupService.InsertGroupsAsync(
+                    new CoreLayer.ViewModels.Chats.CreateGroupViewModel()
+                    {
+                        GroupName = groupName,
+                        UserId = Context.User.GetUserId()
+                    });
+                await Clients.Caller.SendAsync("NewGroup", groupName, group.GroupToken);
             }
-            catch {
+            catch
+            {
                 await Clients.Caller.SendAsync("NewGroup", "Error");
             }
         }

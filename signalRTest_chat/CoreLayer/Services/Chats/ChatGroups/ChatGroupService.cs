@@ -1,4 +1,6 @@
 ﻿using CoreLayer.Services.Users.UserGroups;
+using CoreLayer.Utilities;
+using CoreLayer.ViewModels.Chats;
 using DataLayer.Context;
 using DataLayer.Entities.Chats;
 using DataLayer.Entities.Users;
@@ -24,24 +26,23 @@ namespace CoreLayer.Services.Chats.ChatGroups
             return await Table<ChatGroup>().Include(c => c.Chats).Where(g => g.OwnerId == userId).OrderByDescending(d => d.CreateDate).ToListAsync();
         }
 
-        public async Task<ChatGroup> InsertGroupsAsync(string groupName, long userId)
+        public async Task<ChatGroup> InsertGroupsAsync(CreateGroupViewModel model)
         {
+            if (model.ImageFile == null || !FileValidation.IsValidImageFile(model.ImageFile.FileName)) throw new ArgumentException();
+
+            var imageName = await model.ImageFile.SaveFile("wwwroot/image/group");
             var chatGroup = new ChatGroup()
             {
                 CreateDate = DateTime.Now,
-                GroupTitle = groupName,
-                OwnerId = userId,
+                GroupTitle = model.GroupName,
+                OwnerId = model.UserId,
                 GroupToken = Guid.NewGuid().ToString(),
+                ImageName = imageName
             };
 
             Insert(chatGroup);
             await Save();
-            await _userGroupService.JoinGroup(new UserGroup()
-            {
-                CreateDate = DateTime.Now,
-                GroupId = chatGroup.Id,
-                UserId = userId
-            });
+            await _userGroupService.JoinGroup(model.UserId, chatGroup.Id);
 
             return chatGroup;
         }

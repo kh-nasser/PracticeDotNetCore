@@ -1,5 +1,5 @@
-﻿@using DataLayer.Entities.Chats
-@model List<ChatGroup>
+﻿@using CoreLayer.ViewModels.Chats
+@model List<UserGroupViewModel>
 @{
 	ViewData["Title"] = "Home Page";
 }
@@ -7,7 +7,7 @@
 <!-- Modal -->
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 	<div class="modal-dialog" role="document">
-		<form class="modal-content" onsubmit="insertGroup(event)">
+		<form class="modal-content" enctype="multipart/form-data" onsubmit="insertGroup(event)">
 			<div class="modal-header">
 				<h5 class="modal-title" id="exampleModalLabel">ایجاد گروه</h5>
 				<button type="submit" class="close" data-dismiss="modal" aria-label="Close">
@@ -16,6 +16,8 @@
 			</div>
 			<div class="modal-body">
 				<input type="text" id="groupName" class="form-control" placeholder="نام گروه را وارد کنید" />
+				<br />
+				<input type="file" accept="image/*" name="image" class="form-control" />
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-secondary" data-dismiss="modal">لغو</button>
@@ -77,13 +79,16 @@
 			</li>
 			@foreach (var item in Model)
 			{
-				var lastChat = item.Chats.LastOrDefault();
-				<li data-id="@item.GroupToken">
-					@item.GroupTitle
-					<img src="/img/Default.jpg" />
-					@if (lastChat != null)
+
+				<li data-id="@item.Token">
+					@item.GroupName
+					@{
+						var imagePath = string.IsNullOrEmpty(item.ImageName) ? "/img/Defaults.jpg" : "/image/groups/@item.ImageName";
+					}
+					<img src="@imagePath" />
+					@if (item.LastChat != null)
 					{
-						var time = lastChat.CreateDate;
+						var time = item.LastChat.CreateDate;
 						<span>@time.Date.ToString("MM/dd/yyyy H:mm")</span>
 					}
 				</li>
@@ -119,13 +124,28 @@
 
 	function insertGroup(event){
 		event.preventDefault();
-		var text = $("#groupName").val();
-		if(text){
-			connection.invoke("CreateGroup", text);
-		}
+		//console.log(event.target);
+		var groupName = event.target[0].value;
+		var imageFile = event.target[1].files[0];
+
+		var formData = new FormData();
+		formData.append("GroupName", groupName);
+		formData.append("ImageFile", imageFile);
+		$.ajax({
+			url:"/home/CreateGroup",
+			type:"post",
+			data:formData,
+			enctype:"multipart/form-data",
+			processData:false,
+			contentType:false
+		});
+		//var text = $("#groupName").val();
+		//if(text){
+		//	connection.invoke("CreateGroup", text);
+		//}
 	}
 
-	function appendGroup(groupName, token){
+	function appendGroup(groupName, token, imageName){
 		console.log('appendGroup');
 		//appendGroup
 		if(groupName === "Error") {
@@ -134,7 +154,7 @@
 			$(".rooms ul").append(
 				`<li data-id='${token}'>
 				${groupName}
-				<img src="/img/Default.jpg"/>
+				<img src="/image/groups/${imageName}"/>
 				<span>**</span> </li>`);
 
 			$("#exampleModal").modal('toggle');

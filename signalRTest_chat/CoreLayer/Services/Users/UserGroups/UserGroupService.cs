@@ -18,20 +18,27 @@ namespace CoreLayer.Services.Users.UserGroups
 
         public async Task<List<UserGroupViewModel>> GetUserGroupsAsync(long userId)
         {
-            var result = Table<UserGroup>().Include(c=>c.Group.Chats).Where(g=>g.UserId == userId).Select(s=>new UserGroupViewModel() { 
-            ImageName = s.Group.ImageName,
-            GroupName = s.Group.GroupTitle,
-            LastChat= s.Group.Chats.OrderBy(d=>d.CreateDate).First(),
-            Token = s.Group.GroupToken
+            var result = Table<UserGroup>().Include(c => c.Group.Chats).Where(g => g.UserId == userId).Select(s => new UserGroupViewModel()
+            {
+                ImageName = s.Group.ImageName,
+                GroupName = s.Group.GroupTitle,
+                LastChat = s.Group.Chats.OrderBy(d => d.CreateDate).First(),
+                Token = s.Group.GroupToken
             });
 
             return await result.ToListAsync();
 
         }
 
-        public async Task JoinGroup(UserGroup userGroup)
+        public async Task JoinGroup(long userId, long groupId)
         {
-            Insert(userGroup);
+            var model = new UserGroup()
+            {
+                CreateDate = DateTime.Now,
+                GroupId = groupId,
+                UserId = userId
+            };
+            Insert(model);
             await Save();
         }
     }

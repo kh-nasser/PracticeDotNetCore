@@ -11,6 +11,6 @@ namespace CoreLayer.Services.Users.UserGroups
     public interface IUserGroupService
     {
         Task<List<UserGroupViewModel>> GetUserGroupsAsync(long userId);
-        Task JoinGroup(UserGroup userGroup);
+        Task JoinGroup(long userId, long groupId);
     }
 }
