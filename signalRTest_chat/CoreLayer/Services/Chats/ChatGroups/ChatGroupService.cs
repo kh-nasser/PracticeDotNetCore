@@ -16,7 +16,7 @@ namespace CoreLayer.Services.Chats.ChatGroups
     public class ChatGroupService : BaseService, IChatGroupService
     {
         private IUserGroupService _userGroupService;
-        public ChatGroupService(ChatContext context, IUserGroupService  userGroup) : base(context)
+        public ChatGroupService(ChatContext context, IUserGroupService userGroup) : base(context)
         {
             _userGroupService = userGroup;
         }
@@ -45,6 +45,34 @@ namespace CoreLayer.Services.Chats.ChatGroups
             await _userGroupService.JoinGroup(model.UserId, chatGroup.Id);
 
             return chatGroup;
+        }
+
+        public async Task<List<SearchResultViewModel>> Search(string title)
+        {
+            var result = new List<SearchResultViewModel>();
+            if(string.IsNullOrWhiteSpace(title)) return result;
+
+            var groups = await Table<ChatGroup>().Where(g => g.GroupTitle.Contains(title))
+                .Select(c => new SearchResultViewModel()
+                {
+                    ImageName = c.ImageName,
+                    Token = c.GroupToken,
+                    Title = c.GroupTitle,
+                    IsUser = false
+                }).ToListAsync();
+
+            var users = await Table<User>().Where(g => g.UserName.Contains(title))
+                .Select(c => new SearchResultViewModel()
+                {
+                    ImageName = c.Avatar,
+                    Token = c.Id.ToString(),
+                    Title = c.UserName,
+                    IsUser = true
+                }).ToListAsync();
+
+            result.AddRange(groups);
+            result.AddRange(users);
+            return result;
         }
     }
 }

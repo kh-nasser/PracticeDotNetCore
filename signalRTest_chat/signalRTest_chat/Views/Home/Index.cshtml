@@ -61,39 +61,42 @@
 		<Ul>
 			<li>
 				<form>
-					<input type="text" placeholder="جستوجو کنید" class="form-control" />
+					<input type="text" onkeyup="search()" id="searchInput" placeholder="جستوجو کنید" class="form-control" />
 					<i class="fa fas fa-search"></i>
 				</form>
 			</li>
-			<li>
-				Global
-				<img src="img/Default.jpg" />
-				<span>17:20 1400/01/15 </span>
+			<li id="searchResult" style="cursor:none; padding: 0; display:none">
+				<ul>
+					@*<li class="alert alert-warning">Not Found</li>*@
+				</ul>
 			</li>
-			<li>
-				<button class="btn btn-success d-block w-100" data-toggle="modal" data-target="#exampleModal">
-					<i class="fa fa-plus">
-						ایجاد گروه جدید
-					</i>
-				</button>
-			</li>
-			@foreach (var item in Model)
-			{
-
-				<li data-id="@item.Token">
-					@item.GroupName
-					@{
-						var imagePath = string.IsNullOrEmpty(item.ImageName) ? "/img/Defaults.jpg" : "/image/groups/@item.ImageName";
-					}
-					<img src="@imagePath" />
-					@if (item.LastChat != null)
+			<li id="userGroups" style="cursor:none; padding: 0">
+				<ul>
+					<li>
+						<button class="btn btn-success d-block w-100" data-toggle="modal" data-target="#exampleModal">
+							<i class="fa fa-plus">
+								ایجاد گروه جدید
+							</i>
+						</button>
+					</li>
+					@foreach (var item in Model)
 					{
-						var time = item.LastChat.CreateDate;
-						<span>@time.Date.ToString("MM/dd/yyyy H:mm")</span>
-					}
-				</li>
-			}
 
+						<li data-id="@item.Token">
+							@item.GroupName
+							@{
+								var imagePath = string.IsNullOrEmpty(item.ImageName) ? "/img/Defaults.jpg" : "/image/groups/@item.ImageName";
+							}
+							<img src="@imagePath" />
+							@if (item.LastChat != null)
+							{
+								var time = item.LastChat.CreateDate;
+								<span>@time.Date.ToString("MM/dd/yyyy H:mm")</span>
+							}
+						</li>
+					}
+				</ul>
+			</li>
 		</Ul>
 	</div>
 </div>
@@ -151,13 +154,48 @@
 		if(groupName === "Error") {
 			alert("ERROR!");
 		} else {
-			$(".rooms ul").append(
+			$(".rooms #userGroups ul").append(
 				`<li data-id='${token}'>
 				${groupName}
 				<img src="/image/groups/${imageName}"/>
 				<span>**</span> </li>`);
 
 			$("#exampleModal").modal('toggle');
+		}
+	}
+
+	function search(){
+	var text = $("#searchInput").val();
+		if(text){
+			$('#searchResult').show();
+			$('#userGroups').hide();
+			$.ajax({
+				url="/home/search?title="+text,
+				type = "get",
+			}).done(function (data){
+				for (var i in data){
+					$("#searchResult ul").html("");
+
+					if(data[i].isUser){
+					$("#searchResult ul").append(
+						`<li data-user-id='${data[i].token}'>
+							${data[i].title}
+							<img src="/img/${data[i].imageName}"/>
+							<span></span>
+						</li>`);
+					}
+				else{
+					$("#searchResult ul").append(
+						`<li data-id='${data[i].token}'>
+							${data[i].title}
+							<img src="/image/groups/${data[i].imageName}"/>
+							<span>/*$createDate*/</span>
+						</li>`);}
+				}
+			})
+		} else {
+			$('#searchResult').hide();
+			$('#userGroups').show();
 		}
 	}
 
