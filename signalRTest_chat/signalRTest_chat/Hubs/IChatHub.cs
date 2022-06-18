@@ -4,5 +4,6 @@
     {
         Task SendMessage(string text);
         Task CreateGroup(string groupName);
+        Task JoinGroup(string groupName);
     }
 }

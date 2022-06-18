@@ -30,6 +30,18 @@ namespace CoreLayer.Services.Users.UserGroups
 
         }
 
+        public async Task<bool> IsUserInGroup(long userId, long groupId)
+        {
+            return await Table<UserGroup>().AnyAsync(c => c.UserId == userId && c.GroupId == groupId);
+        }
+
+        public async Task<bool> IsUserInGroup(long userId, string token)
+        {
+            return await Table<UserGroup>()
+                .Include(i=> i.Group)
+                .AnyAsync(c => c.UserId == userId && c.Group.GroupToken == token);
+        }
+
         public async Task JoinGroup(long userId, long groupId)
         {
             var model = new UserGroup()

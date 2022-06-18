@@ -29,12 +29,12 @@
 
 <div class="row">
 	<div class="col-8 chat-content">
-		<div class="header">
+		<div class="header"  style="display:none">
 			<img src="img/Default.jpg" />
 			<h2>علی</h2>
 		</div>
 		<div class="chats">
-			<div class="chat-me">
+			@*<div class="chat-me">
 				<div class="chat">
 					<p>سلام خوبی چه خبر ؟ </p>
 					<span>2020/06/05</span>
@@ -45,9 +45,9 @@
 					<p>سلام ممنون </p>
 					<span>2020/06/05</span>
 				</div>
-			</div>
+			</div>*@
 		</div>
-		<div class="footer">
+		<div class="footer" style="display:none">
 			<form onsubmit="sendMessage(event)">
 				<input id="messageText" type="text" class="form-control" placeholder="متن خود را وارد کنید">
 				<button class="btn btn-success">
@@ -81,8 +81,7 @@
 					</li>
 					@foreach (var item in Model)
 					{
-
-						<li data-id="@item.Token">
+						<li onclick="JoinInGroup('@item.Token')" @*data-id="@item.Token"*@>
 							@item.GroupName
 							@{
 								var imagePath = string.IsNullOrEmpty(item.ImageName) ? "/img/Defaults.jpg" : "/image/groups/@item.ImageName";
@@ -102,6 +101,7 @@
 </div>
 @section Scripts {
 <script src="/lib/microsoft/signalr/dist/browser/signalr.js"></script>
+<script src="/js/SignalRCustom.js"></script>
 <script>
 	var connection = new signalR.HubConnectionBuilder()
 	.withUrl("/chat")
@@ -112,92 +112,22 @@
 	});
 	connection.on("ReceiveMessage", onReceiveMessageResult);
 	connection.on("NewGroup",appendGroup);
+	connection.on("JoinGroup",JoinedGroup);
 
 	connection.start();
 
-	function onReceiveMessageResult(text){
-		console.log(text);
+	//$("li[data-id]").click(function(){
+	//	var token = $(this).attr("data-id");
+
+	//})
+	function JoinedGroup(group, chats){
+		$(".header").css("display", "block");
+		$(".footer").css("display", "block");
+		$(".header h2").html(group.groupTitle);
+		$(".header img").attr("src", `/image/groups/${group.imageName}`);
 	}
-
-	function sendMessage(event){
-		event.preventDefault();//prevent refresh
-		var text = $("#messageText").val();
-		connection.invoke("SendMessage",text)
+	function JoinInGroup(token){
+		connection.invoke("JoinInGroup", token)
 	}
-
-	function insertGroup(event){
-		event.preventDefault();
-		//console.log(event.target);
-		var groupName = event.target[0].value;
-		var imageFile = event.target[1].files[0];
-
-		var formData = new FormData();
-		formData.append("GroupName", groupName);
-		formData.append("ImageFile", imageFile);
-		$.ajax({
-			url:"/home/CreateGroup",
-			type:"post",
-			data:formData,
-			enctype:"multipart/form-data",
-			processData:false,
-			contentType:false
-		});
-		//var text = $("#groupName").val();
-		//if(text){
-		//	connection.invoke("CreateGroup", text);
-		//}
-	}
-
-	function appendGroup(groupName, token, imageName){
-		console.log('appendGroup');
-		//appendGroup
-		if(groupName === "Error") {
-			alert("ERROR!");
-		} else {
-			$(".rooms #userGroups ul").append(
-				`<li data-id='${token}'>
-				${groupName}
-				<img src="/image/groups/${imageName}"/>
-				<span>**</span> </li>`);
-
-			$("#exampleModal").modal('toggle');
-		}
-	}
-
-	function search(){
-	var text = $("#searchInput").val();
-		if(text){
-			$('#searchResult').show();
-			$('#userGroups').hide();
-			$.ajax({
-				url="/home/search?title="+text,
-				type = "get",
-			}).done(function (data){
-				for (var i in data){
-					$("#searchResult ul").html("");
-
-					if(data[i].isUser){
-					$("#searchResult ul").append(
-						`<li data-user-id='${data[i].token}'>
-							${data[i].title}
-							<img src="/img/${data[i].imageName}"/>
-							<span></span>
-						</li>`);
-					}
-				else{
-					$("#searchResult ul").append(
-						`<li data-id='${data[i].token}'>
-							${data[i].title}
-							<img src="/image/groups/${data[i].imageName}"/>
-							<span>/*$createDate*/</span>
-						</li>`);}
-				}
-			})
-		} else {
-			$('#searchResult').hide();
-			$('#userGroups').show();
-		}
-	}
-
 </script>
 }

@@ -13,6 +13,8 @@ namespace CoreLayer.Services.Chats.ChatGroups
         Task<List<ChatGroup>> GetChatGroupsAsync(long userId);
         Task<ChatGroup> InsertGroupsAsync(CreateGroupViewModel model);
         Task<List<SearchResultViewModel>> Search(string title);
+        Task<ChatGroup> GetGroupBy(string token);
+        Task<ChatGroup> GetGroupBy(long id);
 
     }
 }

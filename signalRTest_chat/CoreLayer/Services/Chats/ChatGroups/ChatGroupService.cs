@@ -26,6 +26,16 @@ namespace CoreLayer.Services.Chats.ChatGroups
             return await Table<ChatGroup>().Include(c => c.Chats).Where(g => g.OwnerId == userId).OrderByDescending(d => d.CreateDate).ToListAsync();
         }
 
+        public async Task<ChatGroup> GetGroupBy(string token)
+        {
+            return await Table<ChatGroup>().Include(x=>x.Chats).FirstOrDefaultAsync(g => g.GroupToken == token);
+        }
+
+        public async Task<ChatGroup> GetGroupBy(long id) 
+        {
+            return await GetById<ChatGroup>(id);
+        }
+
         public async Task<ChatGroup> InsertGroupsAsync(CreateGroupViewModel model)
         {
             if (model.ImageFile == null || !FileValidation.IsValidImageFile(model.ImageFile.FileName)) throw new ArgumentException();
