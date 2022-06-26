@@ -1,0 +1,63 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>chats</title>
+    <script src="/Scripts/jquery-3.4.1.min.js"></script>
+    <script src="/Scripts/jquery.signalR-2.4.3.min.js"></script>
+    <script src="/signalr/hubs"></script>
+    <link href="/Content/bootstrap.min.css" rel="stylesheet" />
+</head>
+
+<body>
+    <div class="container">
+        <h2>Chat room</h2>
+        <hr />
+        <input type="hidden" id="displayName" />
+        <textarea class="form-control" id="message" cols="60" rows="8"></textarea>
+        <ul id="chats"></ul>
+
+        <p class="mb-2">
+            <input type="button" id="sendChat" value="Send" class="btn btn-success" />
+        </p>
+    </div>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            console.log("ready!");
+        });
+
+        $(function () {
+            console.log("ready!");
+            $('#displayName').val(prompt('Please enter name:', 'Guest'));
+
+            $("#message").focus();
+            //Server side chatHub
+            var chat = $.connection.chatHub;
+
+            //create persistent connection
+            $.connection.hub.start().done(function () {
+                console.log(`id: ${$.connection.hub.id}`);
+                
+                chat.server.send($("#displayName").val(), "joined");
+
+                $("#sendChat").click(function () {
+                    var name = $("#displayName").val();
+                    var message = $("#message").val();
+
+                    // chat.server: send to server
+                    chat.server.send(name, message);
+                    $("#message").val("");
+                    $("#message").focus();
+                });
+            });
+
+            // chat.client: server push to client with function 'AddNewMessage'
+            chat.client.addNewMessage = function (name, message) {
+                $("#chats")
+                    .prepend(`<li> <Strong> ${name} : <Strong>  ${message}  </li>`);
+            }
+        });
+    </script>
+</body>
+</html>
