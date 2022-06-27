@@ -12,6 +12,7 @@ namespace CoreLayer.Utilities
             if (inputTarget == null) return "File Not Found";
             var fileName = Guid.NewGuid() + inputTarget.FileName;
 
+
             var folderName = Path.Combine(Directory.GetCurrentDirectory(), savePath.Replace("/", "\\"));
             if (!Directory.Exists(folderName))
             {

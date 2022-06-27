@@ -15,9 +15,9 @@ namespace CoreLayer.Services
     {
         private readonly ConcurrentDictionary<string, object> _entitySets = new ConcurrentDictionary<string, object>();
 
-        protected ChatContext _context { get; private set; }
+        protected EchatContext _context { get; private set; }
 
-        protected BaseService(ChatContext context)
+        protected BaseService(EchatContext context)
         {
             _context = context;
         }

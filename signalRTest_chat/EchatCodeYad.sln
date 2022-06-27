@@ -1,0 +1,37 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30804.86
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Echat", "Echat\Echat.csproj", "{A20F1EB2-6065-4E8B-A492-2B0DC2D3F523}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoreLayer", "CoreLayer\CoreLayer.csproj", "{31D77EA6-4C8F-43AB-BF04-883077F946C9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataLayer", "DataLayer\DataLayer.csproj", "{32121B6E-8F5F-4C5F-ADF2-3390DA938C36}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A20F1EB2-6065-4E8B-A492-2B0DC2D3F523}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A20F1EB2-6065-4E8B-A492-2B0DC2D3F523}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A20F1EB2-6065-4E8B-A492-2B0DC2D3F523}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A20F1EB2-6065-4E8B-A492-2B0DC2D3F523}.Release|Any CPU.Build.0 = Release|Any CPU
+		{31D77EA6-4C8F-43AB-BF04-883077F946C9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{31D77EA6-4C8F-43AB-BF04-883077F946C9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{31D77EA6-4C8F-43AB-BF04-883077F946C9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{31D77EA6-4C8F-43AB-BF04-883077F946C9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{32121B6E-8F5F-4C5F-ADF2-3390DA938C36}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{32121B6E-8F5F-4C5F-ADF2-3390DA938C36}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{32121B6E-8F5F-4C5F-ADF2-3390DA938C36}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{32121B6E-8F5F-4C5F-ADF2-3390DA938C36}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {82FA6285-9BA1-422C-A542-7CA2AD53C211}
+	EndGlobalSection
+EndGlobal

@@ -1,10 +1,12 @@
-﻿namespace DataLayer.Entities
+﻿using System;
+using System.ComponentModel.DataAnnotations;
+
+namespace DataLayer.Entities
 {
     public class BaseEntity
     {
-        [System.ComponentModel.DataAnnotations.Key]
+        [Key]
         public long Id { get; set; }
         public DateTime CreateDate { get; set; }
-
     }
 }

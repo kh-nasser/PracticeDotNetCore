@@ -10,7 +10,7 @@ namespace CoreLayer.Services.Users
 {
     public class UserService : BaseService, IUserService
     {
-        public UserService(ChatContext context) : base(context)
+        public UserService(EchatContext context) : base(context)
         {
         }
 

@@ -1,9 +1,11 @@
-﻿using DataLayer.Entities.Chats;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using DataLayer.Entities.Chats;
 
 namespace DataLayer.Entities.Users
 {
-    public class User : BaseEntity
+    public class User:BaseEntity
     {
         [MaxLength(50)]
         public string UserName { get; set; }
@@ -13,8 +15,13 @@ namespace DataLayer.Entities.Users
         [MaxLength(110)]
         public string Avatar { get; set; }
 
-        #region Relations
+
+
+        #region Relation
+        [InverseProperty("User")]
         public ICollection<ChatGroup> ChatGroups { get; set; }
+        [InverseProperty("Receiver")]
+        public ICollection<ChatGroup> PrivateGroup { get; set; }
         public ICollection<Chat> Chats { get; set; }
         public ICollection<UserRole> UserRoles { get; set; }
         public ICollection<UserGroup> UserGroups { get; set; }

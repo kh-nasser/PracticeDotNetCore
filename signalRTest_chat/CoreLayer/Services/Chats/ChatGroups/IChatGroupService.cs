@@ -1,20 +1,18 @@
-﻿using CoreLayer.ViewModels.Chats;
-using DataLayer.Entities.Chats;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using CoreLayer.ViewModels.Chats;
+using DataLayer.Entities.Chats;
 
 namespace CoreLayer.Services.Chats.ChatGroups
 {
     public interface IChatGroupService
     {
-        Task<List<ChatGroup>> GetChatGroupsAsync(long userId);
-        Task<ChatGroup> InsertGroupsAsync(CreateGroupViewModel model);
-        Task<List<SearchResultViewModel>> Search(string title);
-        Task<ChatGroup> GetGroupBy(string token);
+        Task<List<SearchResultViewModel>> Search(string title,long userId);
+        Task<List<ChatGroup>> GetUserGroups(long userId);
+        Task<ChatGroup> InsertGroup(CreateGroupViewModel model);
+        Task<ChatGroup> InsertPrivateGroup(long userId, long receiverId);
         Task<ChatGroup> GetGroupBy(long id);
+        Task<ChatGroup> GetGroupBy(string token);
 
     }
 }

@@ -1,46 +1,73 @@
-﻿using CoreLayer.Services.Users.UserGroups;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
+using CoreLayer.Services.Users.UserGroups;
 using CoreLayer.Utilities;
 using CoreLayer.ViewModels.Chats;
 using DataLayer.Context;
 using DataLayer.Entities.Chats;
 using DataLayer.Entities.Users;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CoreLayer.Services.Chats.ChatGroups
 {
     public class ChatGroupService : BaseService, IChatGroupService
     {
-        private IUserGroupService _userGroupService;
-        public ChatGroupService(ChatContext context, IUserGroupService userGroup) : base(context)
+        private IUserGroupService _Usergroup;
+
+        public ChatGroupService(EchatContext context, IUserGroupService usergroup) : base(context)
         {
-            _userGroupService = userGroup;
+            _Usergroup = usergroup;
         }
 
-        public async Task<List<ChatGroup>> GetChatGroupsAsync(long userId)
+        public async Task<List<SearchResultViewModel>> Search(string title, long userId)
         {
-            return await Table<ChatGroup>().Include(c => c.Chats).Where(g => g.OwnerId == userId).OrderByDescending(d => d.CreateDate).ToListAsync();
+            var result = new List<SearchResultViewModel>();
+            if (string.IsNullOrWhiteSpace(title))
+                return result;
+
+            var groups = await Table<ChatGroup>()
+                .Where(g => g.GroupTitle.Contains(title) && !g.IsPrivate)
+                .Select(s => new SearchResultViewModel()
+                {
+                    ImageName = s.ImageName,
+                    Token = s.GroupToken,
+                    IsUser = false,
+                    Title = s.GroupTitle
+                }).ToListAsync();
+
+            var users = await Table<User>()
+                .Where(g => g.UserName.Contains(title) && g.Id != userId)
+                .Select(s => new SearchResultViewModel()
+                {
+                    ImageName = s.Avatar,
+                    Token = s.Id.ToString(),
+                    IsUser = true,
+                    Title = s.UserName
+                }).ToListAsync();
+            result.AddRange(groups);
+            result.AddRange(users);
+            return result;
         }
 
-        public async Task<ChatGroup> GetGroupBy(string token)
+        public async Task<List<ChatGroup>> GetUserGroups(long userId)
         {
-            return await Table<ChatGroup>().Include(x=>x.Chats).FirstOrDefaultAsync(g => g.GroupToken == token);
+            return await Table<ChatGroup>()
+                .Include(c => c.Chats)
+                .Where(g => g.OwnerId == userId)
+                .OrderByDescending(d => d.CreateDate).ToListAsync();
         }
 
-        public async Task<ChatGroup> GetGroupBy(long id) 
+        public async Task<ChatGroup> InsertGroup(CreateGroupViewModel model)
         {
-            return await GetById<ChatGroup>(id);
-        }
+            if (model.ImageFile == null || !FileValidation.IsValidImageFile(model.ImageFile.FileName))
+                throw new Exception();
 
-        public async Task<ChatGroup> InsertGroupsAsync(CreateGroupViewModel model)
-        {
-            if (model.ImageFile == null || !FileValidation.IsValidImageFile(model.ImageFile.FileName)) throw new ArgumentException();
 
-            var imageName = await model.ImageFile.SaveFile("wwwroot/image/group");
+            var imageName = await model.ImageFile.SaveFile("wwwroot/image/groups");
+
             var chatGroup = new ChatGroup()
             {
                 CreateDate = DateTime.Now,
@@ -49,40 +76,54 @@ namespace CoreLayer.Services.Chats.ChatGroups
                 GroupToken = Guid.NewGuid().ToString(),
                 ImageName = imageName
             };
-
             Insert(chatGroup);
             await Save();
-            await _userGroupService.JoinGroup(model.UserId, chatGroup.Id);
-
+            await _Usergroup.JoinGroup(model.UserId, chatGroup.Id);
             return chatGroup;
         }
 
-        public async Task<List<SearchResultViewModel>> Search(string title)
+        public async Task<ChatGroup> InsertPrivateGroup(long userId, long receiverId)
         {
-            var result = new List<SearchResultViewModel>();
-            if(string.IsNullOrWhiteSpace(title)) return result;
+            var group = await Table<ChatGroup>()
+                .Include(c => c.User)
+                .Include(c => c.Receiver)
+                .SingleOrDefaultAsync(s => 
+                    (s.OwnerId == userId && s.ReceiverId == receiverId)
+                    || (s.OwnerId == receiverId && s.ReceiverId == userId));
 
-            var groups = await Table<ChatGroup>().Where(g => g.GroupTitle.Contains(title))
-                .Select(c => new SearchResultViewModel()
+            if (group == null)
+            {
+                var groupCreated = new ChatGroup()
                 {
-                    ImageName = c.ImageName,
-                    Token = c.GroupToken,
-                    Title = c.GroupTitle,
-                    IsUser = false
-                }).ToListAsync();
+                    CreateDate = DateTime.Now,
+                    GroupTitle = $"Chat With {receiverId}",
+                    GroupToken = Guid.NewGuid().ToString(),
+                    ImageName = "Default.jpg",
+                    IsPrivate = true,
+                    OwnerId = userId,
+                    ReceiverId = receiverId
+                };
+                Insert(groupCreated);
+                await Save();
+                return await GetGroupBy(groupCreated.Id);
+            }
+            return group;
+        }
 
-            var users = await Table<User>().Where(g => g.UserName.Contains(title))
-                .Select(c => new SearchResultViewModel()
-                {
-                    ImageName = c.Avatar,
-                    Token = c.Id.ToString(),
-                    Title = c.UserName,
-                    IsUser = true
-                }).ToListAsync();
+        public async Task<ChatGroup> GetGroupBy(long id)
+        {
+            return await  Table<ChatGroup>()
+                .Include(c => c.User)
+                .Include(c => c.Receiver)
+                .FirstOrDefaultAsync(g => g.Id == id);
+        }
 
-            result.AddRange(groups);
-            result.AddRange(users);
-            return result;
+        public async Task<ChatGroup> GetGroupBy(string token)
+        {
+            return await Table<ChatGroup>()
+                .Include(c => c.User)
+                .Include(c => c.Receiver)
+                .FirstOrDefaultAsync(g => g.GroupToken == token);
         }
     }
 }
