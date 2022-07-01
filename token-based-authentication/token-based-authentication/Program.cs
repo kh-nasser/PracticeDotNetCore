@@ -1,5 +1,8 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 using token_based_authentication.Data;
 using token_based_authentication.Data.Models;
 
@@ -20,6 +23,32 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
     .AddEntityFrameworkStores<AppDbContext>()
     .AddDefaultTokenProviders();
 
+//add authentication
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+    //add JWT Bearer
+    .AddJwtBearer(options =>
+    {
+        options.SaveToken = true;
+        options.RequireHttpsMetadata = false;
+        options.TokenValidationParameters = new TokenValidationParameters()
+        {
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(
+                builder.Configuration.GetConnectionString("JWT:Secret"))),
+
+            ValidateIssuer = true,
+            ValidIssuer = builder.Configuration.GetConnectionString("JWT:Issuer"),
+
+            ValidateAudience = true,
+            ValidAudience = builder.Configuration.GetConnectionString("JWT:Audience")
+        };
+    });
+
 
 var app = builder.Build();
 
@@ -32,6 +61,8 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+//add authentication and authorization
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
