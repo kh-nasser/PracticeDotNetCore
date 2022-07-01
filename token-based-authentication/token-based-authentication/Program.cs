@@ -18,6 +18,12 @@ builder.Services.AddSwaggerGen();
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(connectionString));
 
+//di
+//builder.Services.AddScoped(UserManager<ApplicationUser>, UserManager<ApplicationUser>);
+//builder.Services.AddScoped(RoleManager<IdentityRole>, RoleManager<IdentityRole>);
+//builder.Services.AddScoped(AppDomain, AppDomain);
+//builder.Services.AddScoped(IConfiguration, IConfiguration)
+
 //add identity
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
     .AddEntityFrameworkStores<AppDbContext>()
