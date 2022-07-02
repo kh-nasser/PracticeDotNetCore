@@ -55,11 +55,11 @@ namespace token_based_authentication.Controllers
 
             var result = await userManager.CreateAsync(newUser, model.Password);
             var userInserted = await userManager.FindByEmailAsync(model.EmailAddrress);
-            
+
             if (result.Succeeded && userInserted != null) return Ok("User created");
             return BadRequest(result.Errors == null ?
                 "User could not be created" :
-                $"{JsonSerializer.Serialize(result.Errors.ToArray())}" );
+                $"{JsonSerializer.Serialize(result.Errors.ToArray())}");
         }
 
         [HttpPost("login-user")]
@@ -101,10 +101,25 @@ namespace token_based_authentication.Controllers
                 signingCredentials: new SigningCredentials(authSigingKey, SecurityAlgorithms.HmacSha256));
             //generate jwt-token from token
             var jwtToken = new JwtSecurityTokenHandler().WriteToken(token);
+
+            var refreshToken = new RefreshToken()
+            {
+                JwtId = token.Id,
+                IsRevoked = false,
+                UserId = user.Id,
+                DateAdded = DateTime.UtcNow,
+                DateExpire = DateTime.UtcNow.AddMonths(6),
+                Token = $"{Guid.NewGuid()}-{Guid.NewGuid()}",
+            };
+
+            await context.RefreshTokens.AddAsync(refreshToken);
+            await context.SaveChangesAsync();
+
             //construct reponse
             var response = new AuthenticateResultVM()
             {
                 Token = jwtToken,
+                RefreshToken = refreshToken.Token,
                 ExpireAt = token.ValidTo,
             };
 
