@@ -21,7 +21,6 @@ builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(conn
 //di
 //builder.Services.AddScoped(UserManager<ApplicationUser>, UserManager<ApplicationUser>);
 //builder.Services.AddScoped(RoleManager<IdentityRole>, RoleManager<IdentityRole>);
-//builder.Services.AddScoped(AppDomain, AppDomain);
 //builder.Services.AddScoped(IConfiguration, IConfiguration)
 
 //add identity
@@ -30,31 +29,36 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
     .AddDefaultTokenProviders();
 
 //add authentication
-builder.Services.AddAuthentication(options =>
 {
-    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-    options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-})
+    //first get data from application
+    var jwtSecret = builder.Configuration["Jwt:Secret"];
+    var jwtIssuer = builder.Configuration["Jwt:Issuer"];
+    var jwtAudience = builder.Configuration["Jwt:Audience"];
+    //add authentication
+    builder.Services.AddAuthentication(options =>
+    {
+        options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+        options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+        options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+    })
     //add JWT Bearer
     .AddJwtBearer(options =>
-    {
-        options.SaveToken = true;
-        options.RequireHttpsMetadata = false;
-        options.TokenValidationParameters = new TokenValidationParameters()
-        {
-            ValidateIssuerSigningKey = true,
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(
-                builder.Configuration.GetConnectionString("JWT:Secret"))),
+     {
+         options.SaveToken = true;
+         options.RequireHttpsMetadata = false;
+         options.TokenValidationParameters = new TokenValidationParameters()
+         {
+             ValidateIssuerSigningKey = true,
+             IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(jwtSecret)),
 
-            ValidateIssuer = true,
-            ValidIssuer = builder.Configuration.GetConnectionString("JWT:Issuer"),
+             ValidateIssuer = true,
+             ValidIssuer = jwtIssuer,
 
-            ValidateAudience = true,
-            ValidAudience = builder.Configuration.GetConnectionString("JWT:Audience")
-        };
-    });
-
+             ValidateAudience = true,
+             ValidAudience = jwtAudience
+         };
+     });
+}
 
 var app = builder.Build();
 
