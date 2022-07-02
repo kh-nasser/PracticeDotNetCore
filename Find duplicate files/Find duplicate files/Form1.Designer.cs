@@ -30,82 +30,163 @@
         {
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
             this.folderBrowserDialog2 = new System.Windows.Forms.FolderBrowserDialog();
-            this.btnSourcePath2 = new System.Windows.Forms.Button();
-            this.btnSourcePath1 = new System.Windows.Forms.Button();
-            this.txtPath1 = new System.Windows.Forms.TextBox();
-            this.txtPath2 = new System.Windows.Forms.TextBox();
+            this.tabControl1 = new System.Windows.Forms.TabControl();
+            this.tabPageTwoDirectory = new System.Windows.Forms.TabPage();
+            this.tabPageSingleDirectory = new System.Windows.Forms.TabPage();
             this.richTextBoxResult = new System.Windows.Forms.RichTextBox();
+            this.txtPath2 = new System.Windows.Forms.TextBox();
+            this.txtPath1 = new System.Windows.Forms.TextBox();
+            this.btnSourcePath1 = new System.Windows.Forms.Button();
+            this.btnSourcePath2 = new System.Windows.Forms.Button();
+            this.richTextBoxResult2 = new System.Windows.Forms.RichTextBox();
+            this.txtPath3 = new System.Windows.Forms.TextBox();
+            this.btnSourcePath3 = new System.Windows.Forms.Button();
+            this.tabControl1.SuspendLayout();
+            this.tabPageTwoDirectory.SuspendLayout();
+            this.tabPageSingleDirectory.SuspendLayout();
             this.SuspendLayout();
             // 
-            // btnSourcePath2
+            // tabControl1
             // 
-            this.btnSourcePath2.Location = new System.Drawing.Point(28, 87);
-            this.btnSourcePath2.Name = "btnSourcePath2";
-            this.btnSourcePath2.Size = new System.Drawing.Size(189, 55);
-            this.btnSourcePath2.TabIndex = 1;
-            this.btnSourcePath2.Text = "Source Path";
-            this.btnSourcePath2.UseVisualStyleBackColor = true;
-            this.btnSourcePath2.Click += new System.EventHandler(this.btnSourcePath2_Click);
+            this.tabControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.tabControl1.Controls.Add(this.tabPageTwoDirectory);
+            this.tabControl1.Controls.Add(this.tabPageSingleDirectory);
+            this.tabControl1.Location = new System.Drawing.Point(12, 9);
+            this.tabControl1.Name = "tabControl1";
+            this.tabControl1.SelectedIndex = 0;
+            this.tabControl1.Size = new System.Drawing.Size(780, 510);
+            this.tabControl1.TabIndex = 0;
             // 
-            // btnSourcePath1
+            // tabPageTwoDirectory
             // 
-            this.btnSourcePath1.Location = new System.Drawing.Point(28, 12);
-            this.btnSourcePath1.Name = "btnSourcePath1";
-            this.btnSourcePath1.Size = new System.Drawing.Size(189, 55);
-            this.btnSourcePath1.TabIndex = 2;
-            this.btnSourcePath1.Text = "Source Path";
-            this.btnSourcePath1.UseVisualStyleBackColor = true;
-            this.btnSourcePath1.Click += new System.EventHandler(this.btnSourcePath1_Click);
+            this.tabPageTwoDirectory.Controls.Add(this.richTextBoxResult);
+            this.tabPageTwoDirectory.Controls.Add(this.txtPath2);
+            this.tabPageTwoDirectory.Controls.Add(this.txtPath1);
+            this.tabPageTwoDirectory.Controls.Add(this.btnSourcePath1);
+            this.tabPageTwoDirectory.Controls.Add(this.btnSourcePath2);
+            this.tabPageTwoDirectory.Location = new System.Drawing.Point(4, 29);
+            this.tabPageTwoDirectory.Name = "tabPageTwoDirectory";
+            this.tabPageTwoDirectory.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPageTwoDirectory.Size = new System.Drawing.Size(772, 477);
+            this.tabPageTwoDirectory.TabIndex = 0;
+            this.tabPageTwoDirectory.Text = "Two Directory";
+            this.tabPageTwoDirectory.UseVisualStyleBackColor = true;
             // 
-            // txtPath1
+            // tabPageSingleDirectory
             // 
-            this.txtPath1.Enabled = false;
-            this.txtPath1.Location = new System.Drawing.Point(233, 12);
-            this.txtPath1.Name = "txtPath1";
-            this.txtPath1.Size = new System.Drawing.Size(537, 26);
-            this.txtPath1.TabIndex = 3;
+            this.tabPageSingleDirectory.Controls.Add(this.richTextBoxResult2);
+            this.tabPageSingleDirectory.Controls.Add(this.txtPath3);
+            this.tabPageSingleDirectory.Controls.Add(this.btnSourcePath3);
+            this.tabPageSingleDirectory.Location = new System.Drawing.Point(4, 29);
+            this.tabPageSingleDirectory.Name = "tabPageSingleDirectory";
+            this.tabPageSingleDirectory.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPageSingleDirectory.Size = new System.Drawing.Size(772, 477);
+            this.tabPageSingleDirectory.TabIndex = 1;
+            this.tabPageSingleDirectory.Text = "Single Directory";
+            this.tabPageSingleDirectory.UseVisualStyleBackColor = true;
+            // 
+            // richTextBoxResult
+            // 
+            this.richTextBoxResult.Location = new System.Drawing.Point(19, 173);
+            this.richTextBoxResult.Name = "richTextBoxResult";
+            this.richTextBoxResult.Size = new System.Drawing.Size(739, 276);
+            this.richTextBoxResult.TabIndex = 11;
+            this.richTextBoxResult.Text = "";
             // 
             // txtPath2
             // 
             this.txtPath2.Enabled = false;
-            this.txtPath2.Location = new System.Drawing.Point(233, 87);
+            this.txtPath2.Location = new System.Drawing.Point(224, 98);
             this.txtPath2.Name = "txtPath2";
-            this.txtPath2.Size = new System.Drawing.Size(537, 26);
-            this.txtPath2.TabIndex = 4;
+            this.txtPath2.Size = new System.Drawing.Size(534, 26);
+            this.txtPath2.TabIndex = 10;
             // 
-            // richTextBoxResult
+            // txtPath1
             // 
-            this.richTextBoxResult.Location = new System.Drawing.Point(28, 162);
-            this.richTextBoxResult.Name = "richTextBoxResult";
-            this.richTextBoxResult.Size = new System.Drawing.Size(742, 276);
-            this.richTextBoxResult.TabIndex = 6;
-            this.richTextBoxResult.Text = "";
+            this.txtPath1.Enabled = false;
+            this.txtPath1.Location = new System.Drawing.Point(224, 23);
+            this.txtPath1.Name = "txtPath1";
+            this.txtPath1.Size = new System.Drawing.Size(534, 26);
+            this.txtPath1.TabIndex = 9;
+            // 
+            // btnSourcePath1
+            // 
+            this.btnSourcePath1.Location = new System.Drawing.Point(19, 23);
+            this.btnSourcePath1.Name = "btnSourcePath1";
+            this.btnSourcePath1.Size = new System.Drawing.Size(186, 55);
+            this.btnSourcePath1.TabIndex = 8;
+            this.btnSourcePath1.Text = "Source Path";
+            this.btnSourcePath1.UseVisualStyleBackColor = true;
+            // 
+            // btnSourcePath2
+            // 
+            this.btnSourcePath2.Location = new System.Drawing.Point(19, 98);
+            this.btnSourcePath2.Name = "btnSourcePath2";
+            this.btnSourcePath2.Size = new System.Drawing.Size(186, 55);
+            this.btnSourcePath2.TabIndex = 7;
+            this.btnSourcePath2.Text = "Source Path";
+            this.btnSourcePath2.UseVisualStyleBackColor = true;
+            // 
+            // richTextBoxResult2
+            // 
+            this.richTextBoxResult2.Location = new System.Drawing.Point(17, 96);
+            this.richTextBoxResult2.Name = "richTextBoxResult2";
+            this.richTextBoxResult2.Size = new System.Drawing.Size(739, 354);
+            this.richTextBoxResult2.TabIndex = 14;
+            this.richTextBoxResult2.Text = "";
+            // 
+            // txtPath3
+            // 
+            this.txtPath3.Enabled = false;
+            this.txtPath3.Location = new System.Drawing.Point(222, 24);
+            this.txtPath3.Name = "txtPath3";
+            this.txtPath3.Size = new System.Drawing.Size(534, 26);
+            this.txtPath3.TabIndex = 13;
+            // 
+            // btnSourcePath3
+            // 
+            this.btnSourcePath3.Location = new System.Drawing.Point(17, 24);
+            this.btnSourcePath3.Name = "btnSourcePath3";
+            this.btnSourcePath3.Size = new System.Drawing.Size(186, 55);
+            this.btnSourcePath3.TabIndex = 12;
+            this.btnSourcePath3.Text = "Source Path";
+            this.btnSourcePath3.UseVisualStyleBackColor = true;
+            this.btnSourcePath3.Click += new System.EventHandler(this.btnSourcePath3_Click);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Controls.Add(this.richTextBoxResult);
-            this.Controls.Add(this.txtPath2);
-            this.Controls.Add(this.txtPath1);
-            this.Controls.Add(this.btnSourcePath1);
-            this.Controls.Add(this.btnSourcePath2);
+            this.ClientSize = new System.Drawing.Size(792, 531);
+            this.Controls.Add(this.tabControl1);
             this.Name = "Form1";
             this.Text = "Form1";
+            this.Load += new System.EventHandler(this.Form1_Load);
+            this.tabControl1.ResumeLayout(false);
+            this.tabPageTwoDirectory.ResumeLayout(false);
+            this.tabPageTwoDirectory.PerformLayout();
+            this.tabPageSingleDirectory.ResumeLayout(false);
+            this.tabPageSingleDirectory.PerformLayout();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
         #endregion
         private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog1;
         private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog2;
-        private System.Windows.Forms.Button btnSourcePath2;
-        private System.Windows.Forms.Button btnSourcePath1;
-        private System.Windows.Forms.TextBox txtPath1;
-        private System.Windows.Forms.TextBox txtPath2;
+        private System.Windows.Forms.TabControl tabControl1;
+        private System.Windows.Forms.TabPage tabPageTwoDirectory;
         private System.Windows.Forms.RichTextBox richTextBoxResult;
+        private System.Windows.Forms.TextBox txtPath2;
+        private System.Windows.Forms.TextBox txtPath1;
+        private System.Windows.Forms.Button btnSourcePath1;
+        private System.Windows.Forms.Button btnSourcePath2;
+        private System.Windows.Forms.TabPage tabPageSingleDirectory;
+        private System.Windows.Forms.RichTextBox richTextBoxResult2;
+        private System.Windows.Forms.TextBox txtPath3;
+        private System.Windows.Forms.Button btnSourcePath3;
     }
 }
 
