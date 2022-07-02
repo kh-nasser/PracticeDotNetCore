@@ -50,5 +50,22 @@ namespace token_based_authentication.Controllers
             if (result.Succeeded) return Ok("User created");
             return BadRequest("User could not be created");
         }
+
+        [HttpPost("login-user")]
+        public async Task<IActionResult> Login([FromBody] LoginVM model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest("Please, provide all required field");
+            }
+
+            var userExist = await userManager.FindByEmailAsync(model.EmailAddrress);
+            if (userExist != null && await userManager.CheckPasswordAsync(userExist, model.Password))
+            {
+                return Ok("User signed in");
+            }
+
+            return Unauthorized();
+        }
     }
 }
