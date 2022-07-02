@@ -48,6 +48,24 @@ builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(conn
 //builder.Services.AddScoped(RoleManager<IdentityRole>, RoleManager<IdentityRole>);
 //builder.Services.AddScoped(IConfiguration, IConfiguration)
 
+var tokenValidationParameter = new TokenValidationParameters()
+{
+    ValidateIssuerSigningKey = true,
+    IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(builder.Configuration["Jwt:Secret"])),
+
+    ValidateIssuer = true,
+    ValidIssuer = builder.Configuration["Jwt:Issuer"],
+
+    ValidateAudience = true,
+    ValidAudience = builder.Configuration["Jwt:Audience"],
+
+    ValidateLifetime = true,
+    ClockSkew = TimeSpan.Zero,
+};
+
+builder.Services.AddSingleton(tokenValidationParameter);
+
+
 //add identity
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
     .AddEntityFrameworkStores<AppDbContext>()
@@ -55,10 +73,6 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
 
 //add authentication
 {
-    //first get data from application
-    var jwtSecret = builder.Configuration["Jwt:Secret"];
-    var jwtIssuer = builder.Configuration["Jwt:Issuer"];
-    var jwtAudience = builder.Configuration["Jwt:Audience"];
     //add authentication
     builder.Services.AddAuthentication(options =>
     {
@@ -71,17 +85,7 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
      {
          options.SaveToken = true;
          options.RequireHttpsMetadata = false;
-         options.TokenValidationParameters = new TokenValidationParameters()
-         {
-             ValidateIssuerSigningKey = true,
-             IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(jwtSecret)),
-
-             ValidateIssuer = true,
-             ValidIssuer = jwtIssuer,
-
-             ValidateAudience = true,
-             ValidAudience = jwtAudience
-         };
+         options.TokenValidationParameters = tokenValidationParameter;
 
          options.Events = new JwtBearerEvents
          {

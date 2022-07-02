@@ -20,13 +20,15 @@ namespace token_based_authentication.Controllers
         private readonly RoleManager<IdentityRole> roleManager;
         private readonly AppDbContext context;
         private readonly IConfiguration configuration;
+        private readonly TokenValidationParameters tokenValidationParameters;
 
-        public AuthenticationController(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, AppDbContext context, IConfiguration configuration)
+        public AuthenticationController(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, AppDbContext context, IConfiguration configuration, TokenValidationParameters tokenValidationParameters)
         {
             this.userManager = userManager;
             this.roleManager = roleManager;
             this.context = context;
             this.configuration = configuration;
+            this.tokenValidationParameters = tokenValidationParameters;
         }
 
         [HttpPost("register-user")]
@@ -96,7 +98,7 @@ namespace token_based_authentication.Controllers
             //define token
             var token = new JwtSecurityToken(issuer: configuration["Jwt:Issuer"],
                 audience: configuration["Jwt:Audience"],
-                expires: DateTime.UtcNow.AddMinutes(5),
+                expires: DateTime.UtcNow.AddMinutes(1),
                 claims: authClaims,
                 signingCredentials: new SigningCredentials(authSigingKey, SecurityAlgorithms.HmacSha256));
             //generate jwt-token from token
