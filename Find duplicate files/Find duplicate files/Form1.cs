@@ -95,18 +95,18 @@ namespace Find_duplicate_files
         }
         private void CompereDuplicateInSinglePath()
         {
-           var result = Directory.GetFiles(txtPath3.Text)
-                .Select(f =>
-                {
-                    using (var fs = new FileStream(f, FileMode.Open, FileAccess.Read))
-                    {
-                        return new
-                        {
-                            FileName = f,
-                            FileHash = BitConverter.ToString(SHA1.Create().ComputeHash(fs))
-                        };
-                    }
-                });
+            var result = Directory.GetFiles(txtPath3.Text)
+                 .Select(f =>
+                 {
+                     using (var fs = new FileStream(f, FileMode.Open, FileAccess.Read))
+                     {
+                         return new
+                         {
+                             FileName = f,
+                             FileHash = BitConverter.ToString(SHA1.Create().ComputeHash(fs))
+                         };
+                     }
+                 });
 
             richTextBoxResult.Text = string.Join(Environment.NewLine, result);
 
@@ -127,13 +127,20 @@ namespace Find_duplicate_files
             {
                 Directory.GetFiles(txtPath1.Text);
                 Directory.GetDirectories(txtPath1.Text);
-
                 entries1 = Directory.GetFileSystemEntries(txtPath1.Text, "*", SearchOption.TopDirectoryOnly);
+                for (int i = 0; i < entries1.Length; i++)
+                {
+                    entries1[i] = Path.GetFileName(entries1[i]);
+                }
             }
 
             if (!string.IsNullOrEmpty(txtPath2.Text))
             {
                 entries2 = Directory.GetFileSystemEntries(txtPath2.Text, "*", SearchOption.TopDirectoryOnly);
+                for (int i = 0; i < entries2.Length; i++)
+                {
+                    entries2[i] = Path.GetFileName(entries2[i]);
+                }
             }
 
             if (entries1 != null && entries2 != null)

@@ -32,12 +32,12 @@
             this.folderBrowserDialog2 = new System.Windows.Forms.FolderBrowserDialog();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPageTwoDirectory = new System.Windows.Forms.TabPage();
-            this.tabPageSingleDirectory = new System.Windows.Forms.TabPage();
             this.richTextBoxResult = new System.Windows.Forms.RichTextBox();
             this.txtPath2 = new System.Windows.Forms.TextBox();
             this.txtPath1 = new System.Windows.Forms.TextBox();
             this.btnSourcePath1 = new System.Windows.Forms.Button();
             this.btnSourcePath2 = new System.Windows.Forms.Button();
+            this.tabPageSingleDirectory = new System.Windows.Forms.TabPage();
             this.richTextBoxResult2 = new System.Windows.Forms.RichTextBox();
             this.txtPath3 = new System.Windows.Forms.TextBox();
             this.btnSourcePath3 = new System.Windows.Forms.Button();
@@ -74,19 +74,6 @@
             this.tabPageTwoDirectory.Text = "Two Directory";
             this.tabPageTwoDirectory.UseVisualStyleBackColor = true;
             // 
-            // tabPageSingleDirectory
-            // 
-            this.tabPageSingleDirectory.Controls.Add(this.richTextBoxResult2);
-            this.tabPageSingleDirectory.Controls.Add(this.txtPath3);
-            this.tabPageSingleDirectory.Controls.Add(this.btnSourcePath3);
-            this.tabPageSingleDirectory.Location = new System.Drawing.Point(4, 29);
-            this.tabPageSingleDirectory.Name = "tabPageSingleDirectory";
-            this.tabPageSingleDirectory.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageSingleDirectory.Size = new System.Drawing.Size(772, 477);
-            this.tabPageSingleDirectory.TabIndex = 1;
-            this.tabPageSingleDirectory.Text = "Single Directory";
-            this.tabPageSingleDirectory.UseVisualStyleBackColor = true;
-            // 
             // richTextBoxResult
             // 
             this.richTextBoxResult.Location = new System.Drawing.Point(19, 173);
@@ -119,6 +106,7 @@
             this.btnSourcePath1.TabIndex = 8;
             this.btnSourcePath1.Text = "Source Path";
             this.btnSourcePath1.UseVisualStyleBackColor = true;
+            this.btnSourcePath1.Click += new System.EventHandler(this.btnSourcePath1_Click);
             // 
             // btnSourcePath2
             // 
@@ -128,6 +116,20 @@
             this.btnSourcePath2.TabIndex = 7;
             this.btnSourcePath2.Text = "Source Path";
             this.btnSourcePath2.UseVisualStyleBackColor = true;
+            this.btnSourcePath2.Click += new System.EventHandler(this.btnSourcePath2_Click);
+            // 
+            // tabPageSingleDirectory
+            // 
+            this.tabPageSingleDirectory.Controls.Add(this.richTextBoxResult2);
+            this.tabPageSingleDirectory.Controls.Add(this.txtPath3);
+            this.tabPageSingleDirectory.Controls.Add(this.btnSourcePath3);
+            this.tabPageSingleDirectory.Location = new System.Drawing.Point(4, 29);
+            this.tabPageSingleDirectory.Name = "tabPageSingleDirectory";
+            this.tabPageSingleDirectory.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPageSingleDirectory.Size = new System.Drawing.Size(772, 477);
+            this.tabPageSingleDirectory.TabIndex = 1;
+            this.tabPageSingleDirectory.Text = "Single Directory";
+            this.tabPageSingleDirectory.UseVisualStyleBackColor = true;
             // 
             // richTextBoxResult2
             // 
