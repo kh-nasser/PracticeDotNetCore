@@ -8,6 +8,7 @@ using System.Security.Claims;
 using System.Text;
 using System.Text.Json;
 using token_based_authentication.Data;
+using token_based_authentication.Data.Helper;
 using token_based_authentication.Data.Models;
 using token_based_authentication.Data.ViewModels;
 
@@ -57,9 +58,25 @@ namespace token_based_authentication.Controllers
             };
 
             var result = await userManager.CreateAsync(newUser, model.Password);
-            var userInserted = await userManager.FindByEmailAsync(model.EmailAddrress);
 
-            if (result.Succeeded && userInserted != null) return Ok("User created");
+            if (result.Succeeded)
+            {
+                //Add user role
+
+                switch (model.Role)
+                {
+                    case UserRole.Manager:
+                        await userManager.AddToRoleAsync(newUser, UserRole.Manager);
+                        break;
+                    case UserRole.Student:
+                        await userManager.AddToRoleAsync(newUser, UserRole.Student);
+                        break;
+                    default:
+                        break;
+                }
+
+                return Ok("User created");
+            }
             return BadRequest(result.Errors == null ?
                 "User could not be created" :
                 $"{JsonSerializer.Serialize(result.Errors.ToArray())}");
@@ -102,16 +119,19 @@ namespace token_based_authentication.Controllers
             var storedToken = await context.RefreshTokens.FirstOrDefaultAsync(x => x.Token == model.RefreshToken);
             var dbUser = await userManager.FindByIdAsync(storedToken?.UserId);
 
-            try {
+            try
+            {
                 var tokenCheckResult = jwtTokenHandler.ValidateToken(model.Token, tokenValidationParameters, out var validateToken);
                 return await GenerateJWTTokenAsync(dbUser, storedToken);
             }
-            catch (SecurityTokenException ) {
+            catch (SecurityTokenException)
+            {
                 if (storedToken?.DateExpire >= DateTime.UtcNow)
                 {
                     return await GenerateJWTTokenAsync(dbUser, storedToken);
                 }
-                else {
+                else
+                {
                     return await GenerateJWTTokenAsync(dbUser, null);
                 }
             }
@@ -127,6 +147,11 @@ namespace token_based_authentication.Controllers
                 new Claim(JwtRegisteredClaimNames.Sub, user.Email),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
             };
+            //Add User Role Claims
+            var userRoles = await userManager.GetRolesAsync(user);
+            foreach (var role in userRoles) {
+                authClaims.Add(new Claim(ClaimTypes.Role, role));
+            }
 
             //get secret key
             var authSigingKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(configuration["Jwt:Secret"]));
@@ -138,8 +163,9 @@ namespace token_based_authentication.Controllers
                 signingCredentials: new SigningCredentials(authSigingKey, SecurityAlgorithms.HmacSha256));
             //generate jwt-token from token
             var jwtToken = new JwtSecurityTokenHandler().WriteToken(token);
-            
-            if (storedRefreshToken != null) {
+
+            if (storedRefreshToken != null)
+            {
                 var rTokenResponse = new AuthenticateResultVM()
                 {
                     Token = jwtToken,
