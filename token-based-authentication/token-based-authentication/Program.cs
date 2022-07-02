@@ -82,6 +82,25 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
              ValidateAudience = true,
              ValidAudience = jwtAudience
          };
+
+         options.Events = new JwtBearerEvents
+         {
+             OnAuthenticationFailed = (context) =>
+             {
+                 var loggerFactory = context.HttpContext.RequestServices.GetRequiredService<ILoggerFactory>(); 
+                 var logger = loggerFactory.CreateLogger("Startup");
+
+                 if (context.Exception.GetType() == typeof(SecurityTokenExpiredException))
+                 {
+                     logger.LogInformation("Token-Expired");
+                 }
+                 else {
+                     logger.LogInformation(context.Exception.GetType().ToString());
+
+                 }
+                 return System.Threading.Tasks.Task.CompletedTask;
+             }
+         };
      });
 }
 

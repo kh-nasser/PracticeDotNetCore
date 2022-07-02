@@ -92,11 +92,11 @@ namespace token_based_authentication.Controllers
             };
 
             //get secret key
-            var authSigingKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(configuration["JWT:Secret"]));
+            var authSigingKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(configuration["Jwt:Secret"]));
             //define token
-            var token = new JwtSecurityToken(issuer: configuration["JWT:Issuer"],
-                audience: configuration["JWT:Audience"],
-                expires: DateTime.UtcNow.AddMinutes(1),
+            var token = new JwtSecurityToken(issuer: configuration["Jwt:Issuer"],
+                audience: configuration["Jwt:Audience"],
+                expires: DateTime.UtcNow.AddMinutes(5),
                 claims: authClaims,
                 signingCredentials: new SigningCredentials(authSigingKey, SecurityAlgorithms.HmacSha256));
             //generate jwt-token from token
