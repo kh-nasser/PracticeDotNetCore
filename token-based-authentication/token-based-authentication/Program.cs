@@ -125,4 +125,7 @@ app.UseAuthorization();
 
 app.MapControllers();
 
+//seed the database
+AppDbInitalizer.SeedRolesToDb(app).Wait();
+
 app.Run();
