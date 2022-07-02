@@ -126,7 +126,7 @@ namespace token_based_authentication.Controllers
             }
             catch (SecurityTokenException)
             {
-                if (storedToken?.DateExpire >= DateTime.UtcNow)
+                if ((storedToken.DateExpire >= DateTime.UtcNow) && (!storedToken.IsRevoked))
                 {
                     return await GenerateJWTTokenAsync(dbUser, storedToken);
                 }
