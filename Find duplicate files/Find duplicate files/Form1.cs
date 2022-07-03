@@ -77,7 +77,7 @@ namespace Find_duplicate_files
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            ((Control)this.tabPageSingleDirectory).Enabled = false;
+            //((Control)this.tabPageSingleDirectory).Enabled = false;
         }
 
         private void btnSourcePath3_Click(object sender, EventArgs e)
@@ -95,27 +95,28 @@ namespace Find_duplicate_files
         }
         private void CompereDuplicateInSinglePath()
         {
-            var result = Directory.GetFiles(txtPath3.Text)
-                 .Select(f =>
-                 {
-                     using (var fs = new FileStream(f, FileMode.Open, FileAccess.Read))
-                     {
-                         return new
-                         {
-                             FileName = f,
-                             FileHash = BitConverter.ToString(SHA1.Create().ComputeHash(fs))
-                         };
-                     }
-                 });
+            string[] files = Directory.GetFiles(txtPath3.Text, "*.*", SearchOption.AllDirectories);
+            var duplicatesFileInfos = new List<FileInfo>();
+            var allFileInfos = new List<FileInfo>();
+            foreach (var item in files)
+            {
+                var fileInfo = new FileInfo(item);
 
-            richTextBoxResult.Text = string.Join(Environment.NewLine, result);
+                var doppelganger = allFileInfos.FirstOrDefault(x => x.Name == fileInfo.Name);
+                {
+                    if (doppelganger != null && duplicatesFileInfos.All(x => x.Length != doppelganger.Length))
+                        duplicatesFileInfos.Add(doppelganger);
+                    //if (doppelganger != null)
+                    //    duplicatesFileInfos.Add(fileInfo);
+                }
 
-            //                .Select(f =>
-            //            {
-            //                // Same as above, but with:
-            //                // FileHash = SHA1.Create().ComputeHash(fs)
-            //            })
-            //.GroupBy(f => f.FileHash, StructuralComparisons.StructuralEqualityComparer);
+                allFileInfos.Add(fileInfo);
+            }
+
+            if (duplicatesFileInfos != null)
+            {
+                richTextBoxResult2.Text = string.Join(Environment.NewLine + Environment.NewLine, duplicatesFileInfos);
+            }
         }
         private void CompereDuplicateInTwoPath()
         {
@@ -148,7 +149,7 @@ namespace Find_duplicate_files
                 //var result = entries1.Where(x => entries2.Contains(x)).ToList();
                 var result = entries1.Intersect(entries2).ToList();
                 //result.Aggregate((s1, s2) => s1 + "," + s2);
-                richTextBoxResult.Text = string.Join(Environment.NewLine, result.ToArray());
+                richTextBoxResult.Text = string.Join(Environment.NewLine+ Environment.NewLine, result.ToArray());
             }
         }
     }

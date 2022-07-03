@@ -41,6 +41,8 @@
             this.richTextBoxResult2 = new System.Windows.Forms.RichTextBox();
             this.txtPath3 = new System.Windows.Forms.TextBox();
             this.btnSourcePath3 = new System.Windows.Forms.Button();
+            this.label1 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
             this.tabControl1.SuspendLayout();
             this.tabPageTwoDirectory.SuspendLayout();
             this.tabPageSingleDirectory.SuspendLayout();
@@ -56,11 +58,12 @@
             this.tabControl1.Location = new System.Drawing.Point(12, 9);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(780, 510);
+            this.tabControl1.Size = new System.Drawing.Size(780, 982);
             this.tabControl1.TabIndex = 0;
             // 
             // tabPageTwoDirectory
             // 
+            this.tabPageTwoDirectory.Controls.Add(this.label1);
             this.tabPageTwoDirectory.Controls.Add(this.richTextBoxResult);
             this.tabPageTwoDirectory.Controls.Add(this.txtPath2);
             this.tabPageTwoDirectory.Controls.Add(this.txtPath1);
@@ -69,23 +72,23 @@
             this.tabPageTwoDirectory.Location = new System.Drawing.Point(4, 29);
             this.tabPageTwoDirectory.Name = "tabPageTwoDirectory";
             this.tabPageTwoDirectory.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageTwoDirectory.Size = new System.Drawing.Size(772, 477);
+            this.tabPageTwoDirectory.Size = new System.Drawing.Size(772, 949);
             this.tabPageTwoDirectory.TabIndex = 0;
             this.tabPageTwoDirectory.Text = "Two Directory";
             this.tabPageTwoDirectory.UseVisualStyleBackColor = true;
             // 
             // richTextBoxResult
             // 
-            this.richTextBoxResult.Location = new System.Drawing.Point(19, 173);
+            this.richTextBoxResult.Location = new System.Drawing.Point(19, 185);
             this.richTextBoxResult.Name = "richTextBoxResult";
-            this.richTextBoxResult.Size = new System.Drawing.Size(739, 276);
+            this.richTextBoxResult.Size = new System.Drawing.Size(739, 742);
             this.richTextBoxResult.TabIndex = 11;
             this.richTextBoxResult.Text = "";
             // 
             // txtPath2
             // 
             this.txtPath2.Enabled = false;
-            this.txtPath2.Location = new System.Drawing.Point(224, 98);
+            this.txtPath2.Location = new System.Drawing.Point(224, 124);
             this.txtPath2.Name = "txtPath2";
             this.txtPath2.Size = new System.Drawing.Size(534, 26);
             this.txtPath2.TabIndex = 10;
@@ -93,14 +96,14 @@
             // txtPath1
             // 
             this.txtPath1.Enabled = false;
-            this.txtPath1.Location = new System.Drawing.Point(224, 23);
+            this.txtPath1.Location = new System.Drawing.Point(224, 49);
             this.txtPath1.Name = "txtPath1";
             this.txtPath1.Size = new System.Drawing.Size(534, 26);
             this.txtPath1.TabIndex = 9;
             // 
             // btnSourcePath1
             // 
-            this.btnSourcePath1.Location = new System.Drawing.Point(19, 23);
+            this.btnSourcePath1.Location = new System.Drawing.Point(19, 49);
             this.btnSourcePath1.Name = "btnSourcePath1";
             this.btnSourcePath1.Size = new System.Drawing.Size(186, 55);
             this.btnSourcePath1.TabIndex = 8;
@@ -110,7 +113,7 @@
             // 
             // btnSourcePath2
             // 
-            this.btnSourcePath2.Location = new System.Drawing.Point(19, 98);
+            this.btnSourcePath2.Location = new System.Drawing.Point(19, 124);
             this.btnSourcePath2.Name = "btnSourcePath2";
             this.btnSourcePath2.Size = new System.Drawing.Size(186, 55);
             this.btnSourcePath2.TabIndex = 7;
@@ -120,36 +123,37 @@
             // 
             // tabPageSingleDirectory
             // 
+            this.tabPageSingleDirectory.Controls.Add(this.label2);
             this.tabPageSingleDirectory.Controls.Add(this.richTextBoxResult2);
             this.tabPageSingleDirectory.Controls.Add(this.txtPath3);
             this.tabPageSingleDirectory.Controls.Add(this.btnSourcePath3);
             this.tabPageSingleDirectory.Location = new System.Drawing.Point(4, 29);
             this.tabPageSingleDirectory.Name = "tabPageSingleDirectory";
             this.tabPageSingleDirectory.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageSingleDirectory.Size = new System.Drawing.Size(772, 477);
+            this.tabPageSingleDirectory.Size = new System.Drawing.Size(772, 949);
             this.tabPageSingleDirectory.TabIndex = 1;
             this.tabPageSingleDirectory.Text = "Single Directory";
             this.tabPageSingleDirectory.UseVisualStyleBackColor = true;
             // 
             // richTextBoxResult2
             // 
-            this.richTextBoxResult2.Location = new System.Drawing.Point(17, 96);
+            this.richTextBoxResult2.Location = new System.Drawing.Point(17, 110);
             this.richTextBoxResult2.Name = "richTextBoxResult2";
-            this.richTextBoxResult2.Size = new System.Drawing.Size(739, 354);
+            this.richTextBoxResult2.Size = new System.Drawing.Size(739, 816);
             this.richTextBoxResult2.TabIndex = 14;
             this.richTextBoxResult2.Text = "";
             // 
             // txtPath3
             // 
             this.txtPath3.Enabled = false;
-            this.txtPath3.Location = new System.Drawing.Point(222, 24);
+            this.txtPath3.Location = new System.Drawing.Point(222, 52);
             this.txtPath3.Name = "txtPath3";
             this.txtPath3.Size = new System.Drawing.Size(534, 26);
             this.txtPath3.TabIndex = 13;
             // 
             // btnSourcePath3
             // 
-            this.btnSourcePath3.Location = new System.Drawing.Point(17, 24);
+            this.btnSourcePath3.Location = new System.Drawing.Point(17, 42);
             this.btnSourcePath3.Name = "btnSourcePath3";
             this.btnSourcePath3.Size = new System.Drawing.Size(186, 55);
             this.btnSourcePath3.TabIndex = 12;
@@ -157,12 +161,31 @@
             this.btnSourcePath3.UseVisualStyleBackColor = true;
             this.btnSourcePath3.Click += new System.EventHandler(this.btnSourcePath3_Click);
             // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(15, 12);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(392, 20);
+            this.label1.TabIndex = 12;
+            this.label1.Text = "Find Duplicated Files and Directory base on files name";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(13, 11);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(388, 20);
+            this.label2.TabIndex = 15;
+            this.label2.Text = "Find Duplicated Files and Directory base on file length";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(792, 531);
+            this.ClientSize = new System.Drawing.Size(792, 1003);
             this.Controls.Add(this.tabControl1);
+            this.MaximizeBox = false;
             this.Name = "Form1";
             this.Text = "Form1";
             this.Load += new System.EventHandler(this.Form1_Load);
@@ -189,6 +212,8 @@
         private System.Windows.Forms.RichTextBox richTextBoxResult2;
         private System.Windows.Forms.TextBox txtPath3;
         private System.Windows.Forms.Button btnSourcePath3;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label label2;
     }
 }
 
