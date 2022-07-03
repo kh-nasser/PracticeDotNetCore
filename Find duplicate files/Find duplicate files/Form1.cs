@@ -96,7 +96,7 @@ namespace Find_duplicate_files
         private void CompereDuplicateInSinglePath()
         {
             string[] files = Directory.GetFiles(txtPath3.Text, "*.*", SearchOption.AllDirectories);
-            var duplicatesFileInfos = new List<FileInfo>();
+            var duplicatesFileInfos = new List<Tuple<FileInfo, FileInfo>>();
             var allFileInfos = new List<FileInfo>();
             foreach (var item in files)
             {
@@ -104,8 +104,8 @@ namespace Find_duplicate_files
 
                 var doppelganger = allFileInfos.FirstOrDefault(x => x.Name == fileInfo.Name);
                 {
-                    if (doppelganger != null && duplicatesFileInfos.All(x => x.Length != doppelganger.Length))
-                        duplicatesFileInfos.Add(doppelganger);
+                    if (doppelganger != null && duplicatesFileInfos.All(x => x.Item1.Length != doppelganger.Length))
+                        duplicatesFileInfos.Add(new Tuple<FileInfo, FileInfo>(doppelganger, fileInfo));
                     //if (doppelganger != null)
                     //    duplicatesFileInfos.Add(fileInfo);
                 }
@@ -115,7 +115,7 @@ namespace Find_duplicate_files
 
             if (duplicatesFileInfos != null)
             {
-                richTextBoxResult2.Text = string.Join(Environment.NewLine + Environment.NewLine, duplicatesFileInfos.OrderByDescending(o=>o.Length));
+                richTextBoxResult2.Text = string.Join(Environment.NewLine + Environment.NewLine, duplicatesFileInfos.OrderByDescending(o => o.Item1.Length).Select(x=> $"{x.Item1}{Environment.NewLine}{x.Item1}{Environment.NewLine }"));
             }
         }
         private void CompereDuplicateInTwoPath()
@@ -149,7 +149,7 @@ namespace Find_duplicate_files
                 //var result = entries1.Where(x => entries2.Contains(x)).ToList();
                 var result = entries1.Intersect(entries2).ToList();
                 //result.Aggregate((s1, s2) => s1 + "," + s2);
-                richTextBoxResult.Text = string.Join(Environment.NewLine+ Environment.NewLine, result.ToArray());
+                richTextBoxResult.Text = string.Join(Environment.NewLine + Environment.NewLine, result.ToArray());
             }
         }
     }
