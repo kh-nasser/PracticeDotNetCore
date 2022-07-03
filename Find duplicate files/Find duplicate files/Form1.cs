@@ -115,7 +115,7 @@ namespace Find_duplicate_files
 
             if (duplicatesFileInfos != null)
             {
-                richTextBoxResult2.Text = string.Join(Environment.NewLine + Environment.NewLine, duplicatesFileInfos);
+                richTextBoxResult2.Text = string.Join(Environment.NewLine + Environment.NewLine, duplicatesFileInfos.OrderByDescending(o=>o.Length));
             }
         }
         private void CompereDuplicateInTwoPath()
