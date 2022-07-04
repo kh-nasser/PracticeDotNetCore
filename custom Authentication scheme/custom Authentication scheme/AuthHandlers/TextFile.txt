@@ -1,0 +1,5 @@
+﻿    1-We shall define an options class to specify the scheme we are gonna define, which is basically an extension of the AuthenticationSchemeOptions class provided by the library.
+    2-We define an AuthenticationHandler which works for this defined AuthenticationScheme under which we shall provide the necessary validation logic and must tell the base authentication middleware whether the incoming token validation is a success or a failure.
+    3-If the token validation is a success, we need to pass in an AuthenticationTicket generated basing on the claims we create using the data from the token. This is passed onto the base Authentication middleware which then sets up User claims from the claims we have passed.
+    4-We attach this AuthenticationScheme and AuthenticationHandler to our Authentication middleware for a constant scheme name we shall provide.
+    5-On the endpoint where we need to invoke this authentication scheme, we shall provide the same under the AuthenticationSchemes attribute.
