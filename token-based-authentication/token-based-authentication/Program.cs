@@ -33,6 +33,7 @@ builder.Services.AddSwaggerGen(c =>
             Type = ReferenceType.SecurityScheme
         }
     };
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "api", Version = "v1" });
     c.AddSecurityDefinition(securityScheme.Reference.Id, securityScheme);
     c.AddSecurityRequirement(new OpenApiSecurityRequirement
     {
