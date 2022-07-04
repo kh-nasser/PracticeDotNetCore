@@ -8,7 +8,7 @@ namespace JWTAuthentication
         [StringLength(10, MinimumLength = 5)]
         public string UserName { get; set; }
         [Required]
-        [RegularExpression(@"^(?:.*[a-z]){7,}$", ErrorMessage = "String length must be greater than or equal 7 characters.")]
+        [RegularExpression(@"^.{5,50}$", ErrorMessage = "String length must be greater than or equal 5 characters.")]
         public string Password { get; set; }
     }
 }
