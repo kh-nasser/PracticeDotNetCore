@@ -2,7 +2,7 @@
 
 namespace JWTAuthentication
 {
-    public class UserModel
+    public class UserVM
     {
         [Required]
         [StringLength(10, MinimumLength = 5)]

@@ -7,10 +7,12 @@ namespace JWTAuthentication
 {
     public class JSONWebToken
     {
-        public IConfiguration _config;
-        public JSONWebToken(IConfiguration config)
+        private readonly IConfiguration _config;
+        private readonly TestData _testData;
+        public JSONWebToken(IConfiguration config, TestData testData)
         {
             _config = config;
+            _testData = testData;
         }
 
         //public string GenerateJSONWebToken() {
@@ -64,7 +66,58 @@ namespace JWTAuthentication
         //        );
         //    }
         //}
-        public string GenerateJSONWebToken(UserModel userInfo)
+
+
+        public async Task<AuthenticateResultVM> GenerateJSONWebTokenAsync(UserVM userInfo, RefreshTokenEntity? storedRefreshToken = null)
+        {
+            var token = CreateAccessToken(userInfo);
+            var jwtToken = new JwtSecurityTokenHandler().WriteToken(token);
+
+            if (storedRefreshToken != null)
+            {
+                var rTokenResponse = new AuthenticateResultVM()
+                {
+                    Token = jwtToken,
+                    RefreshToken = storedRefreshToken.Token,
+                    //ExpireAt = token.ValidTo,
+                };
+
+                //todo await update access token
+                _testData.AccessToken().Remove(userInfo);
+                _testData.AccessToken().Add(userInfo, token);
+                return rTokenResponse;
+            }
+
+            var newRefreshToken = new RefreshTokenEntity()
+            {
+                JwtId = token.Id,
+                IsRevoked = false,
+                UserId = userInfo.UserName,
+                DateAdded = DateTime.UtcNow,
+                DateExpire = DateTime.UtcNow.AddMonths(6),
+                Token = $"{Guid.NewGuid()}-{Guid.NewGuid()}",
+            };
+
+            //construct reponse
+            var response = new AuthenticateResultVM()
+            {
+                Token = jwtToken,
+                RefreshToken = newRefreshToken.Token,
+                //ExpireAt = token.ValidTo,
+            };
+
+            //await update refresh token
+            _testData.RefreshToken().Remove(userInfo);
+            _testData.RefreshToken().Add(userInfo, newRefreshToken);
+
+            //todo await update access token
+            _testData.AccessToken().Remove(userInfo);
+            _testData.AccessToken().Add(userInfo, token);
+
+            return response;
+        }
+
+        private JwtSecurityToken CreateAccessToken(UserVM userInfo)
         {
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
@@ -81,8 +134,8 @@ namespace JWTAuthentication
                 claims,
                 expires: DateTime.Now.AddMinutes(1),
                 signingCredentials: credentials);
-            
-            return new JwtSecurityTokenHandler().WriteToken(token);
+
+            return token;
         }
     }
 }
