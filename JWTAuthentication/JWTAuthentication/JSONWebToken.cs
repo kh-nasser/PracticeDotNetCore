@@ -137,5 +137,52 @@ namespace JWTAuthentication
 
             return token;
         }
+
+
+        public bool ValidateToken(TokenValidationParameters tokenValidationParameters, string AccessToken)
+        {
+            bool isValid = false;
+            try
+            {
+                var jwtTokenHandler = new JwtSecurityTokenHandler();
+                var tokenCheckResult = jwtTokenHandler.ValidateToken(AccessToken, tokenValidationParameters, out var validateToken);
+                isValid = true;
+                //Generate-AccessToken
+            }
+            catch (SecurityTokenException)
+            {
+
+                //if ((storedRefreshTokenDto.DateExpire >= DateTime.UtcNow) && (!storedRefreshTokenDto.IsRevoked))
+                //{
+                //    //Generate-AccessToken
+                //}
+                //else
+                //{
+                //    //Generate-RefreshToken
+                //    //Generate-AccessToken
+                //}
+            }
+            return isValid;
+        }
+
+        public JwtSecurityToken? Decode(string jwt)
+        {
+            var handler = new JwtSecurityTokenHandler();
+            var jsonToken = handler.ReadToken(jwt);
+            var token = jsonToken as JwtSecurityToken;
+            return token;
+        }
+
+        public string? GetClaim(string JWT, string ClaimType)
+        {
+            var claim = Decode(JWT)?.Claims.First(claim => claim.Type == ClaimType).Value;
+            return claim;
+        }
+
+        public string? GetClaim(string JWT, JwtRegisteredClaimNames ClaimType)
+        {
+            var claim = GetClaim(JWT, ClaimType);
+            return claim;
+        }
     }
 }
